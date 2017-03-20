@@ -1,0 +1,98 @@
+<html>
+<head>
+  <title>WIZENET Test</title>
+
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/jquery.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="col-md-5">
+      <h2>AJAX call example</h2>
+      <p>
+        <label for="url">API Endpoint</label>
+        <input id="url" type="text" />
+      </p>
+
+      <p>
+        <label for="url">Method</label>
+        <select id="method" name="HTTP Methods">
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+      </p>
+
+      <p>
+        <button id="ajax" class="btn btn-primary" onclick="ajaxCall(document.getElementById('url').value,document.getElementById('method').value)">Execute call</button>
+        <div><strong>AJAX call status:</strong> <span id="status">Call not made</span></div>
+      </p>
+
+      <p>
+        <strong>AJAX calls made:</strong> <span id="callCount">0</span>
+      </p>
+
+      <p>
+        <strong>AJAX response:</strong>
+        <br />
+        <code id="ajaxResponse">Waiting for response</code>
+      </p>
+    </div>
+
+    <div class="col-md-7">
+      <h2>Instructions</h2>
+      <p>
+        <ol>
+          <li>Enter the API endpoint you'd like to hit in the text box to the left.</li>
+          <li>Select the HTTP method you'd like to use from the dropdown box.</li>
+          <li>Click "Execute call" to run!</li>
+        </ol>
+      </p>
+
+      <h2>How it works</h2>
+      <p>
+        The AJAX calls are made using <a href="http://api.jquery.com/jQuery.ajax/">jQuery's ajax method</a>.
+      </p>
+
+      <p>
+        When the "Execute call" button is pressed, the endpoint URL and HTTP
+        method are grabbed from the DOM using <code>document.getElementById</code>.
+        These are passed to the <code>ajaxCall</code> function that lives in
+        <code>script.js</code>.
+      </p>
+
+      <p>
+        jQuery allows us to have three callback functions: <code>success</code>,
+        <code>error</code>, and <code>complete</code>. We use these callback
+        functions to manipulate the DOM to inform the user of what is
+        happening with their request - if it is successful or not, if we
+        are retrying the request, and to keep count of how many requests have
+        been made in total.
+      </p>
+
+      <p>
+        The way we handle retrying our requests is by adding an extra
+        attribute to our AJAX object - <code>tryCount</code>. Initially set
+        to zero, this attribute increments for each call we make that fails.
+        jQuery allows us to nicely make an identical AJAX call by using
+        <code>$.ajax(this)</code>. The value of <code>this</code> in the
+        context of the AJAX object is simply itself.
+      </p>
+
+      <h2>Thoughts</h2>
+      <p>
+        I think it is better to let the browser handle simultaneous AJAX
+        calls. This is because the maximum number of simultaneous requests
+        depends on the browser being used. Additionally, jQuery does not have
+        good built-in support for performing multiple simultaneous requests
+        in an elegant or clean manner.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
