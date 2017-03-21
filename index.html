@@ -29,7 +29,7 @@
       </p>
 
       <p>
-        <button id="ajax" class="btn btn-primary" onclick="ajaxCall(document.getElementById('url').value,document.getElementById('method').value)">Execute call</button>
+        <button id="ajax" class="btn btn-primary" onclick="enqueueAjax(document.getElementById('url').value,document.getElementById('method').value)">Execute call</button>
         <div><strong>AJAX call status:</strong> <span id="status">Call not made</span></div>
       </p>
 
@@ -65,8 +65,10 @@
       <p>
         When the "Execute call" button is pressed, the endpoint URL and HTTP
         method are grabbed from the DOM using <code>document.getElementById</code>.
-        These are passed to the <code>ajaxCall</code> function that lives in
-        <code>script.js</code>.
+        These are passed to the <code>enqueueAjax</code> function that lives in
+        <code>script.js</code>. This adds the URL and method to an array of
+        objects containing the URLs and methods of all calls that have not
+        yet been made.
       </p>
 
       <p>
@@ -89,11 +91,23 @@
 
       <h2>Thoughts</h2>
       <p>
-        I think it is better to let the browser handle simultaneous AJAX
-        calls. This is because the maximum number of simultaneous requests
-        depends on the browser being used. Additionally, jQuery does not have
-        good built-in support for performing multiple simultaneous requests
-        in an elegant or clean manner.
+        In order to limit the number of simultaneous AJAX requests being made
+        two arrays are used: <code>queuedCalls</code>, which holds calls that
+        have yet to be made, and <code>activeCalls</code> which holds calls
+        that are currently in progress. When a call is successful or fails
+        three times in a row the size of the <code>activeCalls</code> array by 1, then calls
+        <code>ajaxCall</code> again. <code>ajaxCall</code> dequeues from
+        <code>queuedCalls</code> and adds that object to <code>activeCalls</code>,
+        assuming a queued call exists. Queued items are not added to active
+        if there are five or more currently active.
+      </p>
+
+      <p>
+        My <code>enqueueAjax</code> method takes <code>url</code> and
+        <code>method</code> as arguments but the <code>ajaxCall</code>
+        method does most of the work. <code>enqueueAjax</code> adds a call to
+        the queue, and <code>ajaxCall</code> recursively executes the active
+        calls and any that might be waiting in the queue.
       </p>
     </div>
   </div>
