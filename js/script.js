@@ -72,6 +72,8 @@ function ajaxCall() {
  * @param  {String} method HTTP method - GET, PUT, POST, DELETE
  */
 function enqueueAjax(url, method) {
-  queuedCalls.push({ url, method });
-  ajaxCall();
+  if ($('#url').val() !== '') {
+    queuedCalls.push({ url, method });
+    ajaxCall();
+  }
 }
